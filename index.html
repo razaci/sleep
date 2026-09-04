@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#071217"/>
+<title>Deep Sleep: Theater Control</title>
+<style>
+:root {
+ --bg:#061015; --panel:#0c1d23e8; --panel2:#10262d; --line:#2a5963;
+ --text:#d7f3f6; --muted:#82a9af; --good:#72f6b2; --warn:#ffcf5a; --bad:#ff6577;
+ --cyan:#72e5f3; --shadow:0 16px 40px #0008;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#031014;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100%}
+body::before{
+ content:""; position:fixed; inset:0; background:
+ linear-gradient(#031014bb,#031014dc), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjgwMCI+CjxkZWZzPgogIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDYxMDE3Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiMxMDI5MzIiLz4KICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA2MTUxYiIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJsYW1wIj4KICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Q5ZmJmZiIgc3RvcC1vcGFjaXR5PSIuOTUiLz4KICAgIDxzdG9wIG9mZnNldD0iLjM1IiBzdG9wLWNvbG9yPSIjOTFkOWU1IiBzdG9wLW9wYWNpdHk9Ii41Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxMDJhMzEiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvcmFkaWFsR3JhZGllbnQ+CiAgPGZpbHRlciBpZD0iYmx1ciI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTgiLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIGZpbGw9InVybCgjZykiLz4KPGVsbGlwc2UgY3g9IjYwMCIgY3k9IjEzMCIgcng9IjI3MCIgcnk9IjE2MCIgZmlsbD0idXJsKCNsYW1wKSIgZmlsdGVyPSJ1cmwoI2JsdXIpIi8+CjxyZWN0IHg9IjcwIiB5PSIxMzAiIHdpZHRoPSIyODAiIGhlaWdodD0iNDAwIiByeD0iMjAiIGZpbGw9IiMwYjIwMjgiIHN0cm9rZT0iIzIzNTM2MCIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxyZWN0IHg9Ijg1MCIgeT0iMTIwIiB3aWR0aD0iMjcwIiBoZWlnaHQ9IjQzMCIgcng9IjIwIiBmaWxsPSIjMGExYjIyIiBzdHJva2U9IiMyYjU4NjUiIHN0cm9rZS13aWR0aD0iNCIvPgo8cmVjdCB4PSIxODAiIHk9IjU3MCIgd2lkdGg9Ijg0MCIgaGVpZ2h0PSI5NSIgcng9IjQyIiBmaWxsPSIjMTczNjNlIiBzdHJva2U9IiM0Yzg4OTAiIHN0cm9rZS13aWR0aD0iNSIvPgo8cmVjdCB4PSIyNTAiIHk9IjYwNSIgd2lkdGg9IjcwMCIgaGVpZ2h0PSI1NSIgcng9IjI1IiBmaWxsPSIjMjE0NDRiIi8+CjxjaXJjbGUgY3g9IjI3MCIgY3k9IjEzMCIgcj0iNzgiIGZpbGw9IiNkZmZhZmYiIG9wYWNpdHk9Ii43Ii8+CjxjaXJjbGUgY3g9IjYwMCIgY3k9Ijk1IiByPSI5MiIgZmlsbD0iI2RmZmFmZiIgb3BhY2l0eT0iLjgyIi8+CjxjaXJjbGUgY3g9IjkyMCIgY3k9IjEzNSIgcj0iNzYiIGZpbGw9IiNkZmZhZmYiIG9wYWNpdHk9Ii42OCIvPgo8ZyBvcGFjaXR5PSIuNDUiIGZpbGw9IiM3ZWM5ZDMiPgo8cmVjdCB4PSIxMTAiIHk9IjE4MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxOCIgcng9IjkiLz4KPHJlY3QgeD0iMTEwIiB5PSIyMjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTIiIHJ4PSI2Ii8+CjxyZWN0IHg9IjkwMCIgeT0iMTkwIiB3aWR0aD0iMTcwIiBoZWlnaHQ9IjE4IiByeD0iOSIvPgo8cmVjdCB4PSI5MDAiIHk9IjIzNSIgd2lkdGg9IjEzMCIgaGVpZ2h0PSIxMiIgcng9IjYiLz4KPC9nPgo8dGV4dCB4PSI2MDAiIHk9Ijc0OCIgZmlsbD0iI2JkZTZlYyIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBvcGFjaXR5PSIuNDIiPk9QRVJBVElORyBUSEVBVEVSIC8vIFNJTVVMQVRJT048L3RleHQ+Cjwvc3ZnPg==") center/cover fixed;
+ z-index:-2;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 4px);z-index:20}
+.app{max-width:1180px;margin:auto;padding:10px 10px 90px}
+.topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;padding:8px 0;background:linear-gradient(#031014f6,#031014cc,#03101400);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#14353d,#092028);border:1px solid #3a6f79;display:grid;place-items:center;box-shadow:inset 0 0 20px #4df2ff12}
+.logo:before{content:"✦";color:var(--cyan);font-size:24px}
+h1{font-size:16px;letter-spacing:.12em;margin:0}
+.sub{font-size:11px;color:var(--muted);margin-top:3px}
+.badge{padding:7px 10px;border-radius:999px;border:1px solid #31525a;background:#071a20;font-size:11px;color:#9edbe2;white-space:nowrap}
+.grid{display:grid;grid-template-columns:1.35fr .65fr;gap:10px}
+.panel{background:linear-gradient(180deg,#0e2229e8,#07171ce8);border:1px solid #234751;border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.panelTitle{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#88b5bd;padding:10px 12px;border-bottom:1px solid #22414a;background:#0d2026cc}
+.theater{position:relative;min-height:270px;background:linear-gradient(#0002,#0008),url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iMjgwIj4KPGRlZnM+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4MT0iMCIgeDI9IjEiPjxzdG9wIHN0b3AtY29sb3I9IiMzYjc0N2UiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxODM5NDIiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iMjgwIiByeD0iMzAiIGZpbGw9IiMwYTFkMjMiLz4KPGVsbGlwc2UgY3g9IjQyMCIgY3k9IjE4MCIgcng9IjMyMCIgcnk9IjYwIiBmaWxsPSIjMDcxMzE5Ii8+CjxjaXJjbGUgY3g9IjE3NSIgY3k9IjEyNyIgcj0iNDgiIGZpbGw9IiNkM2E1OGMiLz4KPHJlY3QgeD0iMjEwIiB5PSI5NSIgd2lkdGg9IjM5MCIgaGVpZ2h0PSI5MiIgcng9IjQzIiBmaWxsPSJ1cmwoI2IpIi8+CjxyZWN0IHg9IjU3NSIgeT0iMTEyIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjI4IiByeD0iMTQiIGZpbGw9IiNkN2U4ZTkiIG9wYWNpdHk9Ii43NiIvPgo8cmVjdCB4PSIxMDUiIHk9IjkyIiB3aWR0aD0iOTUiIGhlaWdodD0iMjQiIHJ4PSIxMiIgZmlsbD0iIzkwY2ZkNSIgb3BhY2l0eT0iLjcyIi8+CjxwYXRoIGQ9Ik0xMzAgMTI2IEMxNTAgMTA1LCAxNzUgMTAwLCAyMDAgMTEyIiBzdHJva2U9IiMwODExMTUiIHN0cm9rZS13aWR0aD0iOSIgZmlsbD0ibm9uZSIvPgo8cmVjdCB4PSIxMzkiIHk9IjEzNSIgd2lkdGg9IjcxIiBoZWlnaHQ9IjIxIiByeD0iMTAiIGZpbGw9IiM5ZWNlZDAiIG9wYWNpdHk9Ii44NCIvPgo8cGF0aCBkPSJNMTQwIDE0NSBDMTU5IDEyNSwgMTkwIDEyNSwgMjA4IDE0NSIgc3Ryb2tlPSIjNmNhOWFlIiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiLz4KPGNpcmNsZSBjeD0iMTY1IiBjeT0iMTQ3IiByPSI0IiBmaWxsPSIjZGZmIi8+CjxjaXJjbGUgY3g9IjE4NyIgY3k9IjE0NyIgcj0iNCIgZmlsbD0iI2RmZiIvPgo8L3N2Zz4=") center bottom/contain no-repeat}
+.statusStrip{position:absolute;left:10px;right:10px;top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mini{background:#06151be8;border:1px solid #2b5963;border-radius:11px;padding:7px;text-align:center}
+.mini b{display:block;font-size:18px;color:#ddfbff}
+.mini span{font-size:9px;color:#84aab0;letter-spacing:.08em}
+.phase{position:absolute;left:12px;right:12px;bottom:12px;background:#061218dd;border:1px solid #2f5f69;border-radius:12px;padding:10px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.phaseText b{font-size:13px} .phaseText div{font-size:11px;color:#8eb2b8;margin-top:2px}
+.progress{height:8px;background:#0c242b;border-radius:999px;overflow:hidden;flex:1;max-width:280px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38c9d9,#8bf2bd);transition:.35s}
+.monitors{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:8px}
+.monitor{background:#02090c;border:1px solid #1e3d44;border-radius:13px;padding:9px;min-height:118px;position:relative;overflow:hidden}
+.monitor .label{font-size:9px;color:#6f969d;letter-spacing:.14em}
+.monitor .value{font:700 25px/1 ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:4px}
+.monitor canvas{width:100%;height:58px;display:block;margin-top:6px}
+.monitor .unit{position:absolute;right:8px;top:9px;font-size:9px;color:#617d82}
+.good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)} .cyan{color:var(--cyan)}
+.console{padding:10px}
+.meterRow{display:grid;grid-template-columns:115px 1fr 42px;align-items:center;gap:8px;margin:8px 0}
+.meterRow label{font-size:11px;color:#a5c8cd}
+.meter{height:9px;background:#081319;border-radius:99px;border:1px solid #18343b;overflow:hidden}
+.meter i{display:block;height:100%;width:50%;transition:.25s;background:linear-gradient(90deg,#4ecbd9,#7af0b7)}
+.meterRow strong{font-size:11px;text-align:right}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+button{appearance:none;border:1px solid #315d66;border-radius:12px;background:linear-gradient(#123039,#0b2027);color:#d8f8fb;min-height:48px;padding:8px;font-weight:700;font-size:12px;letter-spacing:.02em;box-shadow:inset 0 1px #ffffff10,0 4px 10px #0005;touch-action:manipulation}
+button:active{transform:translateY(1px);background:#0b1d22}
+button small{display:block;font-weight:500;color:#82aab0;margin-top:2px;font-size:9px}
+button.primary{border-color:#46a8b6;background:linear-gradient(#1a4b55,#11343c)}
+button.danger{border-color:#7b3f4b;background:linear-gradient(#4a1d26,#281217)}
+.log{max-height:180px;overflow:auto;padding:8px 10px;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+.log div{padding:5px 0;border-bottom:1px solid #153038;color:#9fc2c7}
+.log b{color:#d9f6f8}
+.alarm{display:none;margin:8px 10px 0;padding:9px 10px;border-radius:10px;border:1px solid #7b3d48;background:#2a0f16;color:#ffb8c0;font-size:11px;font-weight:700;animation:pulse .7s infinite alternate}
+@keyframes pulse{to{filter:brightness(1.45)}}
+.footerControls{position:fixed;bottom:0;left:0;right:0;padding:8px max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom));background:#041014f4;border-top:1px solid #214149;z-index:40;display:flex;gap:8px;justify-content:center}
+.footerControls button{min-height:44px;max-width:230px;flex:1}
+.overlay{position:fixed;inset:0;background:#020a0ee8;display:grid;place-items:center;z-index:100;padding:18px}
+.card{max-width:560px;width:100%;background:linear-gradient(#102a31,#08191f);border:1px solid #315f69;border-radius:20px;padding:18px;box-shadow:0 30px 80px #000b}
+.card h2{margin:0 0 8px;font-size:22px}
+.card p{color:#9ec1c6;font-size:13px;line-height:1.55}
+.card ul{color:#aacbd0;font-size:12px;line-height:1.55;padding-left:20px}
+.card button{width:100%;margin-top:8px}
+.hidden{display:none!important}
+@media(max-width:760px){
+ .grid{grid-template-columns:1fr}
+ .theater{min-height:245px}
+ .statusStrip{grid-template-columns:repeat(4,1fr)}
+ .mini b{font-size:15px}
+ .monitor .value{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo"></div><div><h1>DEEP SLEEP</h1><div class="sub">THEATER CONTROL SIMULATION</div></div></div>
+    <div class="badge" id="clock">CASE 00:00</div>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panelTitle">Operating Theater // Patient Bay</div>
+      <div class="theater">
+        <div class="statusStrip">
+          <div class="mini"><b id="wakeRisk">12%</b><span>WAKE RISK</span></div>
+          <div class="mini"><b id="stability">93%</b><span>STABILITY</span></div>
+          <div class="mini"><b id="score">0</b><span>SCORE</span></div>
+          <div class="mini"><b id="combo">x1</b><span>CONTROL</span></div>
+        </div>
+        <div class="phase">
+          <div class="phaseText"><b id="phaseName">Induction</b><div id="objective">Establish stable sleep state.</div></div>
+          <div class="progress"><i id="phaseBar"></i></div>
+        </div>
+      </div>
+
+      <div class="monitors">
+        <div class="monitor"><div class="label">HEART RHYTHM</div><div class="unit">bpm*</div><div class="value good" id="hrVal">72</div><canvas id="ecg"></canvas></div>
+        <div class="monitor"><div class="label">OXYGEN TREND</div><div class="unit">index*</div><div class="value cyan" id="oxVal">98</div><canvas id="ox"></canvas></div>
+        <div class="monitor"><div class="label">PRESSURE TREND</div><div class="unit">index*</div><div class="value warn" id="bpVal">82</div><canvas id="bp"></canvas></div>
+        <div class="monitor"><div class="label">SLEEP DEPTH</div><div class="unit">game scale</div><div class="value good" id="sdVal">68</div><canvas id="sd"></canvas></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <div class="panelTitle">Anesthesia Console // Fictional Controls</div>
+        <div class="console">
+          <div class="meterRow"><label>Sleep depth</label><div class="meter"><i id="mSleep"></i></div><strong id="tSleep">68</strong></div>
+          <div class="meterRow"><label>Airway support</label><div class="meter"><i id="mAir"></i></div><strong id="tAir">72</strong></div>
+          <div class="meterRow"><label>Circulation</label><div class="meter"><i id="mCirc"></i></div><strong id="tCirc">78</strong></div>
+          <div class="meterRow"><label>Pain control</label><div class="meter"><i id="mPain"></i></div><strong id="tPain">74</strong></div>
+          <div class="meterRow"><label>Temperature</label><div class="meter"><i id="mTemp"></i></div><strong id="tTemp">76</strong></div>
+          <div class="meterRow"><label>Stimulation</label><div class="meter"><i id="mStim"></i></div><strong id="tStim">18</strong></div>
+
+          <div class="controls">
+            <button class="primary" onclick="act('sleep')">Increase Sleep<small>raises depth, lowers pressure</small></button>
+            <button onclick="act('air')">Support Airway<small>improves oxygen trend</small></button>
+            <button onclick="act('pain')">Pain Control<small>reduces stimulation surge</small></button>
+            <button onclick="act('circ')">Circulation Support<small>restores pressure trend</small></button>
+            <button onclick="act('warm')">Warm Patient<small>protects temperature</small></button>
+            <button onclick="act('balance')">Fine Balance<small>small global correction</small></button>
+          </div>
+        </div>
+        <div class="alarm" id="alarm"></div>
+      </div>
+
+      <div class="panel" style="margin-top:10px">
+        <div class="panelTitle">Theater Event Log</div>
+        <div class="log" id="log"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="footerControls">
+  <button onclick="togglePause()" id="pauseBtn">Pause</button>
+  <button class="danger" onclick="restart()">Restart Case</button>
+</div>
+
+<div class="overlay" id="start">
+  <div class="card">
+    <h2>Keep the patient asleep.</h2>
+    <p>You are running a fictional operating-theater control console. The procedure gets more stimulating as it progresses; keep sleep depth, airway support, circulation, pain control, and temperature in a safe game zone.</p>
+    <ul>
+      <li>If sleep depth falls too low, wake risk rises quickly.</li>
+      <li>Too much sleep support can destabilize pressure and airway.</li>
+      <li>Procedure events create sudden stimulation spikes.</li>
+      <li>Survive all phases without triggering full awareness.</li>
+    </ul>
+    <p><b>Important:</b> values and controls are invented for gameplay and are not medical instructions.</p>
+    <button class="primary" onclick="begin()">BEGIN CASE</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="end">
+  <div class="card">
+    <h2 id="endTitle">Case Complete</h2>
+    <p id="endText"></p>
+    <button class="primary" onclick="restart()">RUN ANOTHER CASE</button>
+  </div>
+</div>
+
+<script>
+const S = {
+ running:false, paused:false, t:0, phase:0, phaseT:0,
+ sleep:68, air:72, circ:78, pain:74, temp:76, stim:18,
+ score:0, combo:1, wake:12, stability:93, lastEvent:0
+};
+const phases = [
+ ["Induction","Establish stable sleep state.",28,1.0],
+ ["Preparation","Hold steady while the team prepares.",34,1.15],
+ ["Incision","Control the first stimulation surge.",38,1.35],
+ ["Deep Procedure","Sustain balance under heavy stimulation.",48,1.55],
+ ["Closure","Reduce stimulation without losing control.",38,1.2],
+ ["Emergence Hold","Remain asleep until the operation is complete.",26,1.0]
+];
+const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
+function log(msg, hot=false){
+ const e=document.getElementById('log'), d=document.createElement('div');
+ d.innerHTML=`<b>${fmt(S.t)}</b> ${hot?'⚠ ':''}${msg}`; e.prepend(d);
+ while(e.children.length>12)e.removeChild(e.lastChild);
+}
+function fmt(sec){let m=Math.floor(sec/60),s=Math.floor(sec%60);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function begin(){document.getElementById('start').classList.add('hidden');S.running=true;log("Case started. Theater ready.");}
+function restart(){location.reload()}
+function togglePause(){if(!S.running)return;S.paused=!S.paused;document.getElementById('pauseBtn').textContent=S.paused?'Resume':'Pause';log(S.paused?'Simulation paused.':'Simulation resumed.');}
+function act(k){
+ if(!S.running||S.paused)return;
+ if(k==='sleep'){S.sleep+=9;S.circ-=4;S.air-=2;log("Sleep support increased.");}
+ if(k==='air'){S.air+=11;S.sleep-=1;log("Airway support adjusted.");}
+ if(k==='pain'){S.pain+=10;S.stim-=7;S.sleep+=2;log("Pain-control channel reinforced.");}
+ if(k==='circ'){S.circ+=10;S.sleep-=2;log("Circulation support increased.");}
+ if(k==='warm'){S.temp+=9;log("Active warming increased.");}
+ if(k==='balance'){S.sleep+=(65-S.sleep)*.18;S.air+=(75-S.air)*.18;S.circ+=(76-S.circ)*.18;S.pain+=(74-S.pain)*.18;S.temp+=(75-S.temp)*.18;log("Fine-balance correction applied.");}
+ S.sleep=clamp(S.sleep);S.air=clamp(S.air);S.circ=clamp(S.circ);S.pain=clamp(S.pain);S.temp=clamp(S.temp);S.stim=clamp(S.stim);
+}
+function randomEvent(){
+ const names=[
+ ["Surgical traction increases stimulation.",18],
+ ["Instrument change causes a sudden response.",13],
+ ["Procedure intensity rises.",16],
+ ["Team pauses; stimulation briefly drops.",-12],
+ ["Positioning adjustment increases stress.",10],
+ ["Quiet interval lowers stimulation.",-9]
+ ];
+ const ev=names[Math.floor(Math.random()*names.length)];
+ S.stim=clamp(S.stim+ev[1]); if(ev[1]>0)S.circ-=2;
+ log(ev[0],ev[1]>0);
+}
+function calc(){
+ let p=phases[S.phase], intensity=p[3];
+ S.stim += (10+S.phase*3-S.pain*.10)*0.065*intensity;
+ S.stim -= 0.035;
+ S.sleep -= (0.045 + S.stim*0.0019);
+ S.air -= (0.018 + Math.max(0,S.sleep-78)*0.003);
+ S.circ -= (0.018 + Math.max(0,S.sleep-72)*0.005 + Math.max(0,S.stim-65)*0.003);
+ S.pain -= 0.022 + S.phase*0.004;
+ S.temp -= 0.012 + S.phase*0.002;
+ S.stim=clamp(S.stim);S.sleep=clamp(S.sleep);S.air=clamp(S.air);S.circ=clamp(S.circ);S.pain=clamp(S.pain);S.temp=clamp(S.temp);
+
+ let risk = 0;
+ risk += Math.max(0,60-S.sleep)*2.7;
+ risk += Math.max(0,S.stim-48)*0.65;
+ risk += Math.max(0,42-S.pain)*0.8;
+ S.wake=clamp(risk,0,100);
+ let stability=100-(Math.abs(S.air-76)*.45+Math.abs(S.circ-76)*.55+Math.abs(S.temp-75)*.35+Math.abs(S.sleep-68)*.25);
+ S.stability=clamp(stability,0,100);
+
+ if(S.wake<20 && S.stability>72){S.score += 2*S.combo; S.combo=Math.min(8,S.combo+0.002);}
+ else {S.combo=Math.max(1,S.combo-0.015);}
+}
+function check(){
+ let alarm=document.getElementById('alarm'); let msgs=[];
+ if(S.wake>55)msgs.push("AWARENESS RISK RISING");
+ if(S.air<38)msgs.push("AIRWAY SUPPORT LOW");
+ if(S.circ<38)msgs.push("CIRCULATION UNSTABLE");
+ if(S.temp<42)msgs.push("TEMPERATURE FALLING");
+ if(S.sleep>92)msgs.push("SLEEP DEPTH EXCESSIVE");
+ if(msgs.length){alarm.style.display='block';alarm.textContent=msgs.join(" // ");}
+ else alarm.style.display='none';
+ if(S.wake>=100) return end(false,"The patient reached full awareness before the operation was finished.");
+ if(S.air<=10||S.circ<=10) return end(false,"The patient became too unstable to continue the simulated procedure.");
+}
+function end(win,text){
+ S.running=false;
+ document.getElementById('endTitle').textContent=win?"Operation Complete":"Case Failed";
+ document.getElementById('endText').textContent=text+" Final score: "+Math.floor(S.score)+".";
+ document.getElementById('end').classList.remove('hidden');
+}
+function updateUI(){
+ document.getElementById('clock').textContent="CASE "+fmt(S.t);
+ document.getElementById('wakeRisk').textContent=Math.round(S.wake)+"%";
+ document.getElementById('stability').textContent=Math.round(S.stability)+"%";
+ document.getElementById('score').textContent=Math.floor(S.score);
+ document.getElementById('combo').textContent="x"+S.combo.toFixed(1);
+ const p=phases[S.phase];
+ document.getElementById('phaseName').textContent=p[0];
+ document.getElementById('objective').textContent=p[1];
+ document.getElementById('phaseBar').style.width=(S.phaseT/p[2]*100)+"%";
+ const vals={Sleep:S.sleep,Air:S.air,Circ:S.circ,Pain:S.pain,Temp:S.temp,Stim:S.stim};
+ for(const [k,v] of Object.entries(vals)){document.getElementById('m'+k).style.width=clamp(v)+"%";document.getElementById('t'+k).textContent=Math.round(v)}
+ document.getElementById('hrVal').textContent=Math.round(62+S.stim*.28+(76-S.circ)*.18);
+ document.getElementById('oxVal').textContent=Math.round(88+S.air*.12);
+ document.getElementById('bpVal').textContent=Math.round(54+S.circ*.36-S.sleep*.08);
+ document.getElementById('sdVal').textContent=Math.round(S.sleep);
+}
+function wave(id,kind,seed){
+ const c=document.getElementById(id), dpr=window.devicePixelRatio||1, w=c.clientWidth*dpr,h=c.clientHeight*dpr;
+ if(c.width!==w||c.height!==h){c.width=w;c.height=h}
+ const x=c.getContext('2d');x.clearRect(0,0,w,h);x.lineWidth=1.7*dpr;
+ x.strokeStyle=kind==='ecg'?'#72f6b2':kind==='ox'?'#72e5f3':kind==='bp'?'#ffcf5a':'#9df1c2';
+ x.beginPath();
+ for(let px=0;px<w;px++){
+   let t=(px/w*8+seed);
+   let y=.5;
+   if(kind==='ecg'){let q=t%1; y=.55 + (q>.45&&q<.48?-0.55:q>=.48&&q<.51?.72:q>=.51&&q<.56?-0.22:Math.sin(t*18)*.02)}
+   else y=.5+Math.sin(t*2.3)*.16+Math.sin(t*5.1)*.04;
+   let amp=kind==='sd'?(0.65+S.stim/180):1;
+   let py=h*(.5+(y-.5)*amp);
+   if(px===0)x.moveTo(px,py);else x.lineTo(px,py);
+ }
+ x.stroke();
+}
+let last=performance.now();
+function frame(now){
+ let dt=Math.min(.05,(now-last)/1000); last=now;
+ if(S.running&&!S.paused){
+   S.t+=dt;S.phaseT+=dt;calc();check();
+   if(S.t-S.lastEvent>7+Math.random()*6){S.lastEvent=S.t;randomEvent();}
+   let p=phases[S.phase];
+   if(S.phaseT>=p[2]){S.phase++;S.phaseT=0;if(S.phase>=phases.length)return end(true,"The surgical team finished while the patient remained asleep and stable.");log("Phase advanced: "+phases[S.phase][0]+".");}
+ }
+ updateUI(); wave('ecg','ecg',S.t*1.8);wave('ox','ox',S.t*.9);wave('bp','bp',S.t*.75);wave('sd','sd',S.t*.55);
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
